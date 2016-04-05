@@ -28,14 +28,15 @@ http.createServer(function (req, res) {
 
     // Routing
     if (req.url === '/') {
-      if (req.method === '')
-      response.writeHead(200, {
-        'Set-Cookie': 'mycookie=test',
-        'Content-Type': 'text/plain'
-      });
-      var ip = req.connection.remoteAddress;
-      res.write('<h1>Welcome</h1>Your IP: ' + ip);
-      res.end('<pre>' + JSON.stringify(cookies) + '</pre>');
+      if (req.method === 'GET') {
+        res.writeHead(200, {
+          'Set-Cookie': 'mycookie=test',
+          'Content-Type': 'text/html'
+        });
+        var ip = req.connection.remoteAddress;
+        res.write('<h1>Welcome</h1>Your IP: ' + ip);
+        res.end('<pre>' + JSON.stringify(cookies) + '</pre>');
+      }
     } else if (req.url === '/person') {
       if (req.method === 'GET') {
 
@@ -58,14 +59,19 @@ http.createServer(function (req, res) {
             res.end('Read error');
           }
         });
+        
       } else if (req.method === 'POST') {
 
         // Receiving POST data
         var body = [];
-        request.on('data', function(chunk) {
+        req.on('data', function(chunk) {
           body.push(chunk);
         }).on('end', function() {
           var data = Buffer.concat(body).toString();
+          var obj = JSON.parse(data);
+          if (obj.name) obj.name = obj.name.trim();
+          data = JSON.stringify(obj);
+          cache[req.url] = data;
           fs.writeFile('./person.json', data, function(err) {
             if (!err) {
               res.writeHead(200);
@@ -79,7 +85,7 @@ http.createServer(function (req, res) {
       }
     } else {
       res.writeHead(404);
-      res.end('Path not fount');
+      res.end('Path not found');
     }
   }
 

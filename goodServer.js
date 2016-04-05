@@ -3,7 +3,7 @@ var http = require('http');
 var me = { name: 'jura', age: 22 };
 
 var routing = {
-  '/': 'welcome to homepage',
+  '/': '<h1>welcome to homepage</h1>',
   '/user': me,
   '/user/name': function() { return me.name; },
   '/user/age': function() { return me.age; }
