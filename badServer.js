@@ -1,29 +1,14 @@
-// Dependencies
-var http = require('http'),
-    fs = require('fs'),
-    myFS = require('./fs'),
-    parser = require('./parser'),
-    myHttp = require('./http'),
-    logging = require('./logging'),
-    routing = require('./routing');
-
-// Dependency injection
-myFS.fs = fs;
-myFS.stringifyPerson = parser.stringifyPerson;
-
-routing.parser = parser;
-routing.myFS = myFS;
-routing.myHttp = myHttp;
+module.exports = {};
 
 var cache = {};
 
-routing.cache = cache;
+var getServer = function (req, res) {
 
-// Server
-http.createServer(function (req, res) {
+    var cookies = module.exports.parser.parseCookie(req.headers.cookie);
+    module.exports.logging.logRequest(req);
+    module.exports.routing.route(req, res, cookies);
 
-    var cookies = parser.parseCookie(req.headers.cookie);
-    logging.logRequest(req);
-    routing.route(req, res, cookies);
+};
 
-}).listen(8800);
+module.exports.cache = cache;
+module.exports.getServer = getServer;
