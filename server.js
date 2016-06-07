@@ -1,6 +1,6 @@
 var cookies = require('./cookies');
 var http = require('http');
-var	logger = require('./logger');
+var logger = require('./logger');
 var router = require("./router");
 var  fs = require('fs');
 var cache = {};
@@ -13,6 +13,3 @@ exports.start = function(config) {
 	router.route(request, response, thecookies);
   }).listen(config.port, config.host);
 }
-
-
-        
