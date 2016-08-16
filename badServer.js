@@ -1,23 +1,25 @@
+'use strict';
+
 // Dependencies
-var http = require('http'),
+let http = require('http'),
     fs = require('fs');
 
 // Cache
-var cache = {};
+let cache = {};
 
 // HTTP Server
-http.createServer(function (req, res) {
+http.createServer((req, res) => {
 
   // Parse cookies
-  var cookie = req.headers.cookie,
+  let cookie = req.headers.cookie,
       cookies = {};
-  if (cookie) cookie.split(';').forEach(function(item) {
-    var parts = item.split('=');
+  if (cookie) cookie.split(';').forEach((item) => {
+    let parts = item.split('=');
     cookies[(parts[0]).trim()] = (parts[1] || '').trim();
   });
 
   // Logging
-  var date = new Date().toISOString();
+  let date = new Date().toISOString();
   console.log([date, req.method, req.url].join('  '));
 
   // Serve from cache
@@ -33,7 +35,7 @@ http.createServer(function (req, res) {
           'Set-Cookie': 'mycookie=test',
           'Content-Type': 'text/html'
         });
-        var ip = req.connection.remoteAddress;
+        let ip = req.connection.remoteAddress;
         res.write('<h1>Welcome</h1>Your IP: ' + ip);
         res.end('<pre>' + JSON.stringify(cookies) + '</pre>');
       }
@@ -41,14 +43,14 @@ http.createServer(function (req, res) {
       if (req.method === 'GET') {
 
         // Some business logic
-        fs.readFile('./person.json', function(err, data) {
+        fs.readFile('./person.json', (err, data) => {
           if (!err) {
-            var obj = JSON.parse(data);
+            let obj = JSON.parse(data);
             obj.birth = new Date(obj.birth);
-            var difference = new Date() - obj.birth;
+            let difference = new Date() - obj.birth;
             obj.age = Math.floor(difference / 31536000000);
             delete obj.birth;
-            var data = JSON.stringify(obj);
+            let data = JSON.stringify(obj);
             cache[req.url] = data;
 
             // HTTP reply
@@ -59,20 +61,20 @@ http.createServer(function (req, res) {
             res.end('Read error');
           }
         });
-        
+
       } else if (req.method === 'POST') {
 
         // Receiving POST data
-        var body = [];
-        req.on('data', function(chunk) {
+        let body = [];
+        req.on('data', (chunk) => {
           body.push(chunk);
-        }).on('end', function() {
-          var data = Buffer.concat(body).toString();
-          var obj = JSON.parse(data);
+        }).on('end', () => {
+          let data = Buffer.concat(body).toString();
+          let obj = JSON.parse(data);
           if (obj.name) obj.name = obj.name.trim();
           data = JSON.stringify(obj);
           cache[req.url] = data;
-          fs.writeFile('./person.json', data, function(err) {
+          fs.writeFile('./person.json', data, (err) => {
             if (!err) {
               res.writeHead(200);
               res.end('File saved');
