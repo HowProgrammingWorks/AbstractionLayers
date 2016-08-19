@@ -1,6 +1,7 @@
 'use strict';
 
-let http = require('http');
+global.api = {};
+api.http = require('http');
 
 let me = { name: 'jura', age: 22 };
 
@@ -12,13 +13,13 @@ let routing = {
 };
 
 let types = {
-  object: (o) => JSON.stringify(o),
-  string: (s) => s,
+  object: o => JSON.stringify(o),
+  string: s => s,
   undefined: () => 'not found',
   function: (fn, req, res) => fn(req, res) + '',
 };
 
-http.createServer((req, res) => {
+api.http.createServer((req, res) => {
   let data = routing[req.url],
       result = types[typeof(data)](data, req, res);
   res.end(result);

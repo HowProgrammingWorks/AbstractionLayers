@@ -1,14 +1,15 @@
 'use strict';
 
 // Dependencies
-let http = require('http'),
-    fs = require('fs');
+global.api = {};
+api.http = require('http'),
+api.fs = require('fs');
 
 // Cache
 let cache = {};
 
 // HTTP Server
-http.createServer((req, res) => {
+api.http.createServer((req, res) => {
 
   // Parse cookies
   let cookie = req.headers.cookie,
@@ -43,7 +44,7 @@ http.createServer((req, res) => {
       if (req.method === 'GET') {
 
         // Some business logic
-        fs.readFile('./person.json', (err, data) => {
+        api.fs.readFile('./person.json', (err, data) => {
           if (!err) {
             let obj = JSON.parse(data);
             obj.birth = new Date(obj.birth);
@@ -74,7 +75,7 @@ http.createServer((req, res) => {
           if (obj.name) obj.name = obj.name.trim();
           data = JSON.stringify(obj);
           cache[req.url] = data;
-          fs.writeFile('./person.json', data, (err) => {
+          api.fs.writeFile('./person.json', data, (err) => {
             if (!err) {
               res.writeHead(200);
               res.end('File saved');
