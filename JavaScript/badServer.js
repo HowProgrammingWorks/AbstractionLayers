@@ -2,7 +2,7 @@
 
 // Dependencies
 global.api = {};
-api.http = require('http'),
+api.http = require('http');
 api.fs = require('fs');
 
 // Cache
