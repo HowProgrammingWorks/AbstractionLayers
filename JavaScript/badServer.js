@@ -51,12 +51,12 @@ api.http.createServer((req, res) => {
             let difference = new Date() - obj.birth;
             obj.age = Math.floor(difference / 31536000000);
             delete obj.birth;
-            let data = JSON.stringify(obj);
-            cache[req.url] = data;
+            let sobj = JSON.stringify(obj);
+            cache[req.url] = sobj;
 
             // HTTP reply
             res.writeHead(200);
-            res.end(data);
+            res.end(sobj);
           } else {
             res.writeHead(500);
             res.end('Read error');
