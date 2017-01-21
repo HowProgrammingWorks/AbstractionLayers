@@ -3,16 +3,16 @@
 global.api = {};
 api.http = require('http');
 
-let me = { name: 'jura', age: 22 };
+const me = { name: 'jura', age: 22 };
 
-let routing = {
+const routing = {
   '/': '<h1>welcome to homepage</h1>',
   '/user': me,
   '/user/name': () => me.name,
   '/user/age': () => me.age
 };
 
-let types = {
+const types = {
   object: o => JSON.stringify(o),
   string: s => s,
   undefined: () => 'not found',
@@ -20,7 +20,7 @@ let types = {
 };
 
 api.http.createServer((req, res) => {
-  let data = routing[req.url],
-      result = types[typeof(data)](data, req, res);
+  const data = routing[req.url];
+  const result = types[typeof(data)](data, req, res);
   res.end(result);
 }).listen(80);

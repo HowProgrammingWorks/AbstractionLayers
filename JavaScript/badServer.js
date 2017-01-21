@@ -6,21 +6,21 @@ api.http = require('http');
 api.fs = require('fs');
 
 // Cache
-let cache = {};
+const cache = {};
 
 // HTTP Server
 api.http.createServer((req, res) => {
 
   // Parse cookies
-  let cookie = req.headers.cookie,
-      cookies = {};
-  if (cookie) cookie.split(';').forEach((item) => {
-    let parts = item.split('=');
+  const cookie = req.headers.cookie;
+  const cookies = {};
+  if (cookie) cookie.split(';').forEach(item => {
+    const parts = item.split('=');
     cookies[(parts[0]).trim()] = (parts[1] || '').trim();
   });
 
   // Logging
-  let date = new Date().toISOString();
+  const date = new Date().toISOString();
   console.log([date, req.method, req.url].join('  '));
 
   // Serve from cache
@@ -36,7 +36,7 @@ api.http.createServer((req, res) => {
           'Set-Cookie': 'mycookie=test',
           'Content-Type': 'text/html'
         });
-        let ip = req.connection.remoteAddress;
+        const ip = req.connection.remoteAddress;
         res.write('<h1>Welcome</h1>Your IP: ' + ip);
         res.end('<pre>' + JSON.stringify(cookies) + '</pre>');
       }
@@ -46,12 +46,12 @@ api.http.createServer((req, res) => {
         // Some business logic
         api.fs.readFile('./person.json', (err, data) => {
           if (!err) {
-            let obj = JSON.parse(data);
+            const obj = JSON.parse(data);
             obj.birth = new Date(obj.birth);
-            let difference = new Date() - obj.birth;
+            const difference = new Date() - obj.birth;
             obj.age = Math.floor(difference / 31536000000);
             delete obj.birth;
-            let sobj = JSON.stringify(obj);
+            const sobj = JSON.stringify(obj);
             cache[req.url] = sobj;
 
             // HTTP reply
@@ -66,12 +66,12 @@ api.http.createServer((req, res) => {
       } else if (req.method === 'POST') {
 
         // Receiving POST data
-        let body = [];
+        const body = [];
         req.on('data', (chunk) => {
           body.push(chunk);
         }).on('end', () => {
           let data = Buffer.concat(body).toString();
-          let obj = JSON.parse(data);
+          const obj = JSON.parse(data);
           if (obj.name) obj.name = obj.name.trim();
           data = JSON.stringify(obj);
           cache[req.url] = data;
