@@ -1,7 +1,6 @@
 'use strict';
 
-global.api = {};
-api.http = require('http');
+const http = require('http');
 
 const me = { name: 'jura', age: 22 };
 
@@ -19,7 +18,7 @@ const types = {
   function: (fn, req, res) => fn(req, res) + '',
 };
 
-api.http.createServer((req, res) => {
+http.createServer((req, res) => {
   const data = routing[req.url];
   const result = types[typeof(data)](data, req, res);
   res.end(result);
