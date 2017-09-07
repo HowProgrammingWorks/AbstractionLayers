@@ -20,6 +20,8 @@ const types = {
 
 http.createServer((req, res) => {
   const data = routing[req.url];
-  const result = types[typeof(data)](data, req, res);
+  const type = typeof(data);
+  const serializer = types[type];
+  const result = serializer(data, req, res);
   res.end(result);
 }).listen(80);
