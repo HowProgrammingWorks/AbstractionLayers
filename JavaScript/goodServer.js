@@ -8,7 +8,7 @@ const routing = {
   '/': '<h1>welcome to homepage</h1>',
   '/user': me,
   '/user/name': () => me.name,
-  '/user/age': () => me.age
+  '/user/age': () => me.age,
 };
 
 const types = {
@@ -24,4 +24,4 @@ http.createServer((req, res) => {
   const serializer = types[type];
   const result = serializer(data, req, res);
   res.end(result);
-}).listen(80);
+}).listen(8000);
