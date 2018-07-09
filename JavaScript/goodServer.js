@@ -2,6 +2,8 @@
 
 const http = require('http');
 
+const PORT = 8000;
+
 const me = { name: 'jura', age: 22 };
 
 const routing = {
@@ -12,7 +14,7 @@ const routing = {
 };
 
 const types = {
-  object: o => JSON.stringify(o),
+  object: JSON.stringify,
   string: s => s,
   undefined: () => 'not found',
   function: (fn, req, res) => fn(req, res) + '',
@@ -24,4 +26,4 @@ http.createServer((req, res) => {
   const serializer = types[type];
   const result = serializer(data, req, res);
   res.end(result);
-}).listen(8000);
+}).listen(PORT);
