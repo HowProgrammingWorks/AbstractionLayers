@@ -36,8 +36,8 @@ http.createServer((req, res) => {
           'Content-Type': 'text/html'
         });
         const ip = req.connection.remoteAddress;
-        res.write('<h1>Welcome</h1>Your IP: ' + ip);
-        res.end('<pre>' + JSON.stringify(cookies) + '</pre>');
+        res.write(`<h1>Welcome</h1>Your IP: ${ip}`);
+        res.end(`<pre>${JSON.stringify(cookies)}</pre>`);
       }
     } else if (req.url === '/person') {
       if (req.method === 'GET') {
