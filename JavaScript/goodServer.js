@@ -15,9 +15,9 @@ const routing = {
 
 const types = {
   object: JSON.stringify,
-  string: s => s,
+  string: (s) => s,
   undefined: () => 'not found',
-  function: (fn, req, res) => fn(req, res) + '',
+  function: (fn, req, res) => fn(req, res).toString(),
 };
 
 http.createServer((req, res) => {

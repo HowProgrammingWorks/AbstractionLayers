@@ -13,7 +13,7 @@ http.createServer((req, res) => {
   // Parse cookies
   const cookie = req.headers.cookie;
   const cookies = {};
-  if (cookie) cookie.split(';').forEach(item => {
+  if (cookie) cookie.split(';').forEach((item) => {
     const parts = item.split('=');
     cookies[(parts[0]).trim()] = (parts[1] || '').trim();
   });
@@ -66,7 +66,7 @@ http.createServer((req, res) => {
 
         // Receiving POST data
         const body = [];
-        req.on('data', chunk => {
+        req.on('data', (chunk) => {
           body.push(chunk);
         }).on('end', () => {
           let data = Buffer.concat(body).toString();
@@ -74,7 +74,7 @@ http.createServer((req, res) => {
           if (obj.name) obj.name = obj.name.trim();
           data = JSON.stringify(obj);
           cache[req.url] = data;
-          fs.writeFile('./person.json', data, err => {
+          fs.writeFile('./person.json', data, (err) => {
             if (!err) {
               res.writeHead(200);
               res.end('File saved');
