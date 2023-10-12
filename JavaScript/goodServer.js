@@ -17,13 +17,13 @@ const types = {
   object: JSON.stringify,
   string: (s) => s,
   undefined: () => 'not found',
-  function: (fn, req, res) => fn(req, res).toString(),
+  function: (fn) => fn().toString(),
 };
 
 http.createServer((req, res) => {
   const data = routing[req.url];
   const type = typeof data;
   const serializer = types[type];
-  const result = serializer(data, req, res);
+  const result = serializer(data);
   res.end(result);
 }).listen(PORT);
