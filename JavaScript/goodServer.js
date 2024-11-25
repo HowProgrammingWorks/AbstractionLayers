@@ -20,10 +20,12 @@ const types = {
   function: (fn, req, res) => fn(req, res).toString(),
 };
 
-http.createServer((req, res) => {
-  const data = routing[req.url];
-  const type = typeof data;
-  const serializer = types[type];
-  const result = serializer(data, req, res);
-  res.end(result);
-}).listen(PORT);
+http
+  .createServer((req, res) => {
+    const data = routing[req.url];
+    const type = typeof data;
+    const serializer = types[type];
+    const result = serializer(data, req, res);
+    res.end(result);
+  })
+  .listen(PORT);
